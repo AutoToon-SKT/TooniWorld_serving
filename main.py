@@ -1,15 +1,21 @@
 from typing import Union
-
+from pydantic import BaseModel
 from fastapi import FastAPI
+
+
 
 app = FastAPI()
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+class AllStoryRequest(BaseModel):
+    allStory: str
+
+@app.post("/{userId}/{infoId}/allstory")
+def read_item(userId: int, infoId: int, request: AllStoryRequest):  
+    print("userId " + str(userId))  
+    print("infoId " + str(infoId))  
+    print("allStory " + request.allStory)
+    return {"userId": userId, "infoId": infoId, "allStory": request.allStory}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+
